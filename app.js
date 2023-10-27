@@ -6,6 +6,7 @@ app.get('/', (req, res) => {
     res.status(200).json({
         title: 'Learning NodeJs',
         content: "Study with me",
+        author: "Truong Ngoc De"
     });
 })
 
