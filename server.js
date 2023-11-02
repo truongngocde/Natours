@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
+
 const app = require('./app');
 
 // Connect database
@@ -14,7 +15,6 @@ mongoose.connect(DB, {
 }).then(() => {
   console.log(`Database connected successfully`);
 });
-
 
 // Create server
 const port = process.env.PORT || 8000;
