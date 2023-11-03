@@ -7,18 +7,18 @@ exports.getAllTours = async (req, res) => {
     // BUILD QUERY
     // 1. Filtering
     const queryObj = {...req.query};
+    console.log(queryObj);
     const excludedFieds = ['page', 'sort', 'limit', 'fields'];
     excludedFieds.forEach(param => delete queryObj[param]);
-
+    
     // 2. Advenced Filtering
-    console.log(queryObj);
     // {difficulty: 'easy', duration: {gte: 5}}
     // {difficulty: 'easy', duration: {$gte: 5}}
     let queryStr = JSON.stringify(queryObj);
     queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, match => `$${match}`);
     
     let query = Tour.find(JSON.parse(queryStr));
-
+    
     // 3) Sorting
     // tours?sort=price,ratingAverage
     if(req.query.sort) {
@@ -36,10 +36,22 @@ exports.getAllTours = async (req, res) => {
       const fields = req.query.fields.split(',').join(' ');
       query = query.select(fields);
     }else {
-      query = query.select('__v');
+      query = query.select('-__v');
     }
-    // EXECUTE QUERY    
-    
+
+    // 5) Pagination (phan trang)
+    const page = req.query.page * 1 || 1;
+    const limit = req.query.limit * 1 || 100;
+    let skip = (page - 1) * limit;
+    // tours?page=2&limit=10
+    query = query.skip(skip).limit(limit);
+
+    if (req.query.page) {
+      const numTours = await Tour.countDocuments();
+      if(skip >= numTours) throw new Error('This page not does exist');
+    }
+
+    // EXECUTE QUERY      
     const tours = await query;
 
     res.status(200).json({
