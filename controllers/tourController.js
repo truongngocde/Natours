@@ -16,16 +16,28 @@ exports.getAllTours = async (req, res) => {
     // {difficulty: 'easy', duration: {$gte: 5}}
     let queryStr = JSON.stringify(queryObj);
     queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, match => `$${match}`);
-    console.log(JSON.parse(queryStr));
     
-    
+    let query = Tour.find(JSON.parse(queryStr));
 
-    const query = Tour.find(JSON.parse(queryStr));
-    // const tours = await Tour.find()
-    //   .where('duration')
-    //   .equals(5)
-    //   .where('difficulty')
-    //   .equals('easy');
+    // 3) Sorting
+    // tours?sort=price,ratingAverage
+    if(req.query.sort) {
+      const sortBy = req.query.sort.split(',').join(' ');
+      query = query.sort(sortBy);
+      //query = query.sort(req.query.sort);
+      // sort('price ratingAverage)
+    }else {
+      query = query.sort('-createdAt');
+    }
+    
+    // 4) Field limiting
+    // tours?fields=name,duration,price,difficulty
+    if(req.query.fields){
+      const fields = req.query.fields.split(',').join(' ');
+      query = query.select(fields);
+    }else {
+      query = query.select('__v');
+    }
     // EXECUTE QUERY    
     
     const tours = await query;
