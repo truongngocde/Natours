@@ -13,6 +13,7 @@ exports.getAll = (Model) =>
       .sort()
       .limitFields()
       .paginate();
+    //const doc = await features.query.explain(); -> Read performance with index
     const doc = await features.query;
 
     res.status(200).json({

@@ -120,6 +120,9 @@ const tourSchema = new mongoose.Schema(
     toObject: { virtuals: true },
   }
 );
+// Read performance with index 
+// tourSchema.index({price: 1, ratingsAverage: -1});
+// tourSchema.index({slug: 1});
 
 // Thêm 1 field mà không có trong database
 tourSchema.virtual('durationWeeks').get(function () {
