@@ -1,6 +1,5 @@
 const { query } = require('express');
 const Tour = require('./../models/tourModel');
-const APIFeatures = require('./../utils/apiFeaturesTour');
 const catchAsync = require('./../utils/catchAsync');
 const AppError = require('./../utils/appError');
 const factory = require('./handleFactory');
@@ -12,56 +11,14 @@ exports.aliasTopTours = (req, res, next) => {
   next();
 };
 
+// GET -> Read All Tour
+exports.getAllTours = factory.getAll(Tour);
 // GET -> Read
-exports.getAllTours = catchAsync(async (req, res, next) => {
-  // EXECUTE QUERY
-  const features = new APIFeatures(Tour.find(), req.query)
-    .filter()
-    .sort()
-    .limitFields()
-    .paginate();
-  const tours = await features.query;
-
-  res.status(200).json({
-    status: 'success',
-    results: tours.length,
-    data: {
-      tours,
-    },
-  });
-});
-
-// GET -> Read
-exports.getTour = catchAsync(async (req, res, next) => {
-  const tour = await Tour.findById(req.params.id).populate({
-    path: 'reviews',
-  });
-  if (!tour) {
-    return next(
-      new AppError(`No tour found with the ID of ${req.params.id}`, 404)
-    );
-  }
-  res.status(200).json({
-    status: 'success',
-    data: {
-      tour,
-    },
-  });
-});
-
-// const catchAsync = (fn) => {
-//   // return middleware - anonymous function
-//   return (req, res, next) => {
-//     fn(req, res, next).catch(next);
-//   };
-// };
-
+exports.getTour = factory.getOne(Tour, {path: 'reviews'})
 // POST -> Create
 exports.createTour = factory.createOne(Tour);
-
 // PATCH -> Update
 exports.updateTour = factory.updateOne(Tour);
-
 // DELETE -> Delete
 exports.deleteTour = factory.deleteOne(Tour);
 

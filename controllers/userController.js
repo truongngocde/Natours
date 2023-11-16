@@ -44,26 +44,13 @@ exports.deleteMe = catchAsync(async (req, res, next) => {
 
 
 // GET -> Read all Users -> /api/v1/users
-exports.getAllUsers = catchAsync(async (req, res, next) => {
-  const user = await User.find();
-  res.status(200).json({
-    status: 'success',
-    data: {
-      user,
-    },
-  });
-});
+exports.getAllUsers = factory.getAll(User);
 exports.createUser = (req, res) => {
   res.status(500).json({
     status: 'error',
-    message: 'Method not defined',
+    message: 'Method not defined ! Please you signup',
   });
 };
-exports.getUser = (req, res) => {
-  res.status(500).json({
-    status: 'error',
-    message: 'Method not defined',
-  });
-};
+exports.getUser = factory.getOne(User);
 exports.updateUser = factory.updateOne(User);
 exports.deleteUser = factory.deleteOne(User);
