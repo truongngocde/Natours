@@ -3,6 +3,7 @@ const Tour = require('./../models/tourModel');
 const APIFeatures = require('./../utils/apiFeaturesTour');
 const catchAsync = require('./../utils/catchAsync');
 const AppError = require('./../utils/appError');
+const factory = require('./handleFactory');
 
 exports.aliasTopTours = (req, res, next) => {
   req.query.limit = '5';
@@ -56,52 +57,13 @@ exports.getTour = catchAsync(async (req, res, next) => {
 // };
 
 // POST -> Create
-exports.createTour = catchAsync(async (req, res, next) => {
-  const newTour = await Tour.create(req.body);
-  res.status(201).json({
-    status: 'success',
-    data: {
-      tour: newTour,
-    },
-  });
-});
+exports.createTour = factory.createOne(Tour);
 
 // PATCH -> Update
-exports.updateTour = catchAsync(async (req, res, next) => {
-  // new = true -> khi update trả lại giá trị đã update
-  // runValidators: true -> chạy lại ràng buộc dữ liệu
-  const updateTour = await Tour.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
-    runValidators: true,
-  });
-  if (!updateTour) {
-    return next(
-      new AppError(`No tour found with the ID of ${req.params.id}`, 404)
-    );
-  }
-  res.status(200).json({
-    status: 'Success',
-    data: {
-      updateTour,
-    },
-  });
-});
+exports.updateTour = factory.updateOne(Tour);
 
 // DELETE -> Delete
-exports.deleteTour = catchAsync(async (req, res, next) => {
-  const tourDelete = await Tour.findByIdAndDelete(req.params.id);
-  if (!tourDelete) {
-    return next(
-      new AppError(`No tour found with the ID of ${req.params.id}`, 404)
-    );
-  }
-  res.status(204).json({
-    status: 'success',
-    data: {
-      tour: null,
-    },
-  });
-});
+exports.deleteTour = factory.deleteOne(Tour);
 
 // Aggregation Pipeline : Matcing and Grouping (kĩ thuật thống kê)
 exports.getTourStats = catchAsync(async (req, res, next) => {

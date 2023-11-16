@@ -1,6 +1,7 @@
 const User = require('./../models/userModel');
 const catchAsync = require('./../utils/catchAsync');
 const AppError = require('./../utils/appError');
+const factory = require('./handleFactory');
 
 const filterObj = (obj, ...allowedFields) => {
   const newObj = {}
@@ -42,8 +43,6 @@ exports.deleteMe = catchAsync(async (req, res, next) => {
 })
 
 
-
-
 // GET -> Read all Users -> /api/v1/users
 exports.getAllUsers = catchAsync(async (req, res, next) => {
   const user = await User.find();
@@ -66,15 +65,5 @@ exports.getUser = (req, res) => {
     message: 'Method not defined',
   });
 };
-exports.updateUser = (req, res) => {
-  res.status(500).json({
-    status: 'error',
-    message: 'Method not defined',
-  });
-};
-exports.deleteUser = (req, res) => {
-  res.status(500).json({
-    status: 'error',
-    message: 'Method not defined',
-  });
-};
+exports.updateUser = factory.updateOne(User);
+exports.deleteUser = factory.deleteOne(User);
