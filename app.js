@@ -68,16 +68,12 @@ app.use(hpp({
   ]
 }));
 
-app.use((req, res, next) => {
-  console.log("Hello from the Middleware 👌");
-  next();
-})
-
+// Test middleware
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
   console.log(req.cookies);
   next();
-})
+});
 // 3) ROUTERS
 
 
