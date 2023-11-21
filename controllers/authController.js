@@ -66,7 +66,7 @@ exports.login = catchAsync(async (req, res, next) => {
 exports.logout = (req, res) => {
   res.cookie('jwt', 'loggedout', {
     expires: new Date(Date.now() + 10 * 1000),
-    httpOnly: true
+    httpOnly: true,
   });
   res.status(200).json({ status: 'success' });
 };
@@ -133,12 +133,13 @@ exports.isLoggedIn = async (req, res, next) => {
       }
 
       // 3) Check if user changed password after the token was issued
-      if (currentUser.changedPasswordAfter(decoded.iat)) {
+      if (currentUser.changesPasswordAfter(decoded.iat)) {
         return next();
       }
 
       // THERE IS A LOGGED IN USER
       res.locals.user = currentUser;
+
       return next();
     } catch (err) {
       return next();

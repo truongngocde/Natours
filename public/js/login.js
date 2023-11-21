@@ -12,6 +12,7 @@ export const login = async (email, password) => {
         password,
       },
     });
+    console.log(email, password);
     if (res.data.status === 'success') {
       showAlert('success', 'Logged in successfully !');
       window.setTimeout(() => {
@@ -30,8 +31,8 @@ export const logout = async () => {
       url: 'http://localhost:8000/api/v1/users/logout',
     });
     if (res.data.status === 'success') {
-      location.reload(true);
       showAlert('success', 'Logged out successfully !');
+      location.reload(true);
     }
   } catch (error) {
     showAlert('error', 'Error logging out  ! Try again');
