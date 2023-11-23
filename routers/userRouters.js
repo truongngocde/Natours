@@ -1,7 +1,8 @@
 const express = require('express');
-const router = express.Router();
 const userController = require('../controllers/userController');
 const authController = require('../controllers/authController');
+
+const router = express.Router();
 
 // api users
 router.post('/signup', authController.signup);
@@ -15,11 +16,16 @@ router.use(authController.protect);
 
 router.patch('/updateMyPassword', authController.updatePassword);
 router.get('/me', userController.getMe, userController.getUser);
-router.patch('/updateInfoMe', userController.updateInfoMe);
+router.patch(
+  '/updateInfoMe',
+  userController.uploadUserPhoto,
+  userController.resizeUserPhoto,
+  userController.updateInfoMe
+);
 router.delete('/deleteMe', userController.deleteMe);
 
 // Authentication and Authorization for Admin
-router.use(authController.restrictTo('admin'))
+router.use(authController.restrictTo('admin'));
 router
   .route('/')
   .get(userController.getAllUsers)
