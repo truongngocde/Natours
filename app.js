@@ -28,7 +28,13 @@ app.set('views', path.join(__dirname, 'views'))
 // Set security HTTP headers
 //app.use(helmet())
 app.use( helmet({ contentSecurityPolicy: false }) ); //use axios link
-app.use(cors());
+app.use(cors(
+  {
+    origin: [],
+    credentials: true,
+    methods: ["POST", "GET"]
+  }
+));
 // 1) GLOBAL/ MIDDLEWARES
 
 // Serving static files
