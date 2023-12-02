@@ -1,5 +1,5 @@
 import '@babel/polyfill';
-import { displayMap } from './mapBox';
+//import { displayMap } from './mapBox';
 import { login, logout } from './login';
 import { updateSettings } from './updateSettings';
 import { bookTour } from './stripe';
@@ -12,10 +12,10 @@ const userChangePassWordForm = document.querySelector('.form-user-password');
 const bookBtn = document.getElementById('book-tour');
 
 
-if (mapBox) {
-  const locations = JSON.parse(mapBox.dataset.locations);
-  displayMap(locations);
-}
+// if (mapBox) {
+//   const locations = JSON.parse(mapBox.dataset.locations);
+//   displayMap(locations);
+// }
 
 if (loginForm) {
   loginForm.addEventListener('submit', (e) => {
@@ -43,10 +43,10 @@ if (userChangePassWordForm) {
     e.preventDefault();
     document.querySelector('.btn--save-password').textContent = 'Updating...';
 
-    const passCurrent = document.getElementById('password-current').value;
+    const passwordCurrent = document.getElementById('password-current').value;
     const password = document.getElementById('password').value;
     const passwordConfirm = document.getElementById('password-confirm').value;
-    await updateSettings({ passCurrent, password, passwordConfirm }, 'password');
+    await updateSettings({ passwordCurrent, password, passwordConfirm }, 'password');
 
     document.querySelector('.btn--save-password').textContent = 'Save password';
     document.getElementById('password-current').value = '';
@@ -54,6 +54,8 @@ if (userChangePassWordForm) {
     document.getElementById('password-confirm').value = '';
   });
 }
+
+
 
 if (bookBtn) {
   bookBtn.addEventListener('click', (e) => {
